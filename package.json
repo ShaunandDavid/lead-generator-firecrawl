@@ -1,0 +1,44 @@
+{
+  "name": "lead-scraper",
+  "version": "0.1.0",
+  "description": "Firecrawl + OpenAI + Google Sheets lead scraper CLI",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "lead-scraper": "src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "node scripts/test-fixture.js",
+    "lint": "node scripts/check.js",
+    "api": "node src/server.js",
+    "web:dev": "npm --prefix web run dev",
+    "dev": "concurrently \"npm run api\" \"npm run web:dev\""
+  },
+  "keywords": [
+    "lead",
+    "scraper",
+    "firecrawl",
+    "google sheets"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@mendable/firecrawl-js": "^4.3.5",
+    "cheerio": "^1.1.2",
+    "commander": "^14.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "googleapis": "^160.0.0",
+    "jsdom": "^27.0.0",
+    "libphonenumber-js": "^1.12.22",
+    "nanoid": "^5.1.6",
+    "openai": "^5.23.0",
+    "p-limit": "^7.1.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

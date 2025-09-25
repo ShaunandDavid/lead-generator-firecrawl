@@ -1,0 +1,75 @@
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+
+# Production builds
+web/.next/
+web/out/
+
+# Cache
+.cache/
+.cache-loader/
+.cache-dir/
+.cache-db/
+.cache-control/
+web/.turbo/
+**/.DS_Store
+
+# Env & credentials (NEVER COMMIT)
+.env
+.env.local
+.env.*.local
+*.env
+*.env.*
+*.key
+*.pem
+*.p12
+*.crt
+*.cer
+*.der
+**/service-account.json
+*.config.json
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Misc
+cache/
+**/run-state.json
+**/runs.json
+*.bak
+*.tmp
+*.temp
+
+# TypeScript build artifacts
+web/*.tsbuildinfo
+
+# Next.js
+web/.next/cache
+.env
+.env.*
+.DS_Store
+logs/
+cache/
+

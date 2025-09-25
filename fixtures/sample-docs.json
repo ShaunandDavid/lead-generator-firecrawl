@@ -1,0 +1,16 @@
+[
+  {
+    "url": "https://sample-co.test/",
+    "markdown": "# Sample Co\nSample Co builds AI analytics dashboards for retail teams.\nContact us at contact@sample.co or call +1 (555) 123-4567.\nFind out more at https://sample-co.test/contact.\n",
+    "html": "<html><body><h1>Sample Co</h1><p>Sample Co builds AI analytics dashboards for retail teams.</p><a href=\"/contact\">Contact</a><p>Email: contact@sample.co</p><p>Phone: +1 (555) 123-4567</p><a href=\"https://www.linkedin.com/company/sample-co\">LinkedIn</a></body></html>",
+    "metadata": { "title": "Sample Co | Home" },
+    "links": ["https://sample-co.test/contact", "https://sample-co.test/about"]
+  },
+  {
+    "url": "https://sample-co.test/about",
+    "markdown": "## About Sample Co\nWe operate from Austin, TX and support mid-market retailers.\n",
+    "html": "<html><body><h2>About Sample Co</h2><p>We operate from Austin, TX and support mid-market retailers.</p></body></html>",
+    "metadata": { "title": "About Sample Co" },
+    "links": []
+  }
+]
