@@ -9,7 +9,8 @@ import {
   appendLeadRows,
   createSpreadsheet,
   fetchExistingLeadIds,
-  ensureHeaderRow
+  ensureHeaderRow,
+  shareSpreadsheet
 } from "./googleSheets.js";
 import { recordFailure, upsertDomainState } from "./storage.js";
 import { loadDocumentsFromFolder } from "./localLoader.js";
@@ -182,18 +183,22 @@ export async function runPipeline(options) {
   let spreadsheetUrl = sheetId ? `https://docs.google.com/spreadsheets/d/${sheetId}` : "";
   let createdNewSheet = false;
 
+  const shareWith = Array.from(new Set([
+    ...config.sheetShareWith,
+    ...(options.shareWith || [])
+  ]));
+  const shareNotify = options.shareNotify ?? config.shareNotify;
+  const shareOnReuse = options.shareOnReuse ?? config.shareOnReuse;
+
   if (!dryRun && !options.reuseSheet) {
-    const shareWith = Array.from(new Set([
-      ...config.sheetShareWith,
-      ...(options.shareWith || [])
-    ]));
     const title = buildSpreadsheetTitle(domains, options);
     try {
       const created = await createSpreadsheet({
         title,
         sheetName,
         shareWith,
-        folderId: options.sheetFolderId || config.sheetFolderId
+        folderId: options.sheetFolderId || config.sheetFolderId,
+        notify: shareNotify
       });
       sheetId = created.spreadsheetId;
       spreadsheetUrl = created.spreadsheetUrl;
@@ -210,8 +215,18 @@ export async function runPipeline(options) {
       throw new Error("--reuse-sheet requested but SHEET_ID is not configured");
     }
     logger.info("Reusing existing spreadsheet", { sheetId, sheetName });
+    if (shareOnReuse && shareWith.length) {
+      try {
+        await shareSpreadsheet({
+          sheetId,
+          emails: shareWith,
+          notify: shareNotify
+        });
+      } catch (error) {
+        logger.warn("Unable to update spreadsheet sharing", { sheetId, error: error.message });
+      }
+    }
   }
-
   const existingLeadIds = new Set();
   if (!dryRun && sheetId) {
     try {

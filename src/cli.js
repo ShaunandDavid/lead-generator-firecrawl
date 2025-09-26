@@ -38,6 +38,8 @@ program
   .option("--title <name>", "Spreadsheet title override for this run")
   .option("--keyword <text>", "Keyword to include in the auto-generated spreadsheet title")
   .option("--share <emails>", "Additional comma/space separated emails to share the spreadsheet with", parseEmailList)
+  .option("--share-notify", "Send Google share notification emails")
+  .option("--share-on-reuse", "Share existing sheet when using --reuse-sheet")
   .option("--sheet-folder <id>", "Drive folder ID where new spreadsheets should be stored")
   .option("--reuse-sheet", "Append to the existing SHEET_ID instead of creating a new spreadsheet")
   .option("--max-depth <number>", "Max crawl depth", (value) => parseInteger(value, config.maxDepth))
@@ -61,6 +63,8 @@ program
       title: cmdOptions.title,
       keyword: cmdOptions.keyword,
       shareWith: cmdOptions.share || [],
+      shareNotify: cmdOptions.shareNotify,
+      shareOnReuse: cmdOptions.shareOnReuse,
       sheetFolderId: cmdOptions.sheetFolder,
       reuseSheet: Boolean(cmdOptions.reuseSheet),
       maxDepth: cmdOptions.maxDepth,

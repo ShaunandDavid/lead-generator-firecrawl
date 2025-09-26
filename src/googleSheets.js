@@ -79,6 +79,55 @@ function toRowValues(row) {
   return HEADER.map((key) => row[key] ?? "");
 }
 
+function normalizeShareTargets(emails = []) {
+  return Array.from(
+    new Set(
+      emails
+        .map((email) => (typeof email === "string" ? email.trim() : ""))
+        .filter(Boolean)
+    )
+  );
+}
+
+export async function shareSpreadsheet({
+  sheetId,
+  emails = [],
+  notify = config.shareNotify
+}) {
+  if (!sheetId) {
+    throw new Error("shareSpreadsheet requires a sheetId");
+  }
+  const targets = normalizeShareTargets(emails);
+  if (!targets.length) return;
+
+  const drive = await getDrive();
+  const sendNotificationEmail = Boolean(notify);
+  const granted = [];
+
+  await Promise.all(
+    targets.map(async (email) => {
+      try {
+        await drive.permissions.create({
+          fileId: sheetId,
+          requestBody: {
+            role: "writer",
+            type: "user",
+            emailAddress: email
+          },
+          sendNotificationEmail
+        });
+        granted.push(email);
+      } catch (error) {
+        logger.warn("Failed to share spreadsheet", { sheetId, email, error: error.message });
+      }
+    })
+  );
+
+  if (granted.length) {
+    logger.info("Spreadsheet shared", { sheetId, emails: granted, notify: sendNotificationEmail });
+  }
+}
+
 async function addSheet(sheetId, sheetName) {
   const sheets = await getSheets();
   await sheets.spreadsheets.batchUpdate({
@@ -100,7 +149,8 @@ export async function createSpreadsheet({
   title,
   sheetName = DEFAULT_TAB,
   shareWith = [],
-  folderId
+  folderId,
+  notify = config.shareNotify
 }) {
   const sheets = await getSheets();
   const requestBody = {
@@ -131,24 +181,11 @@ export async function createSpreadsheet({
   }
 
   if (shareWith.length) {
-    const drive = await getDrive();
-    await Promise.all(
-      shareWith.map((email) =>
-        drive.permissions
-          .create({
-            fileId: spreadsheetId,
-            requestBody: {
-              role: "writer",
-              type: "user",
-              emailAddress: email.trim()
-            },
-            sendNotificationEmail: false
-          })
-          .catch((error) => {
-            logger.warn("Failed to share spreadsheet", { email, error: error.message });
-          })
-      )
-    );
+    await shareSpreadsheet({
+      sheetId: spreadsheetId,
+      emails: shareWith,
+      notify
+    });
   }
 
   return { spreadsheetId, spreadsheetUrl, sheetName };

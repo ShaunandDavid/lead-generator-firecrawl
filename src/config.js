@@ -31,7 +31,9 @@ export const config = {
   maxPages: Number(process.env.MAX_PAGES || 80),
   cacheDir: process.env.CACHE_DIR || path.resolve("cache"),
   logsDir: process.env.LOGS_DIR || path.resolve("logs"),
-  dryRun: process.env.DRY_RUN === "true"
+  dryRun: process.env.DRY_RUN === "true",
+  shareNotify: process.env.SHEET_SHARE_NOTIFY === "true",
+  shareOnReuse: process.env.SHEET_SHARE_ON_REUSE === "true"
 };
 
 export function ensureDirectories() {

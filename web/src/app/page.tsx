@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import Hero from "@/components/Hero";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
@@ -376,7 +378,9 @@ export default function Home() {
   }
 
   return (
-    <main className="relative min-h-screen w-full px-6 md:px-12 pt-14 pb-20 text-white">
+    <>
+      <Hero />
+      <main id="run-interface" className="relative min-h-screen w-full px-6 md:px-12 pt-14 pb-20 text-white">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <motion.div
           initial={{ opacity: 0 }}
@@ -719,6 +723,7 @@ export default function Home() {
         </aside>
       </section>
     </main>
+    </>
   );
 }
 
